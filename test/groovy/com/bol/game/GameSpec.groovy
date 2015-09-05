@@ -1,6 +1,7 @@
 package com.bol.game
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class GameSpec extends Specification {
 
@@ -42,5 +43,23 @@ class GameSpec extends Specification {
         picks = [0, 1, 2, 3, 4, 5]
         pits1 = [4, 2, 10, 2, 1, 1, 12]
         pits2 = [8, 1, 1, 8, 0, 8, 14]
+    }
+
+    @Unroll
+    def "game over for #players"() {
+        given:
+        def game = new Game(players as int[][])
+
+        when:
+        def isOver = game.pick(pit)
+
+        then:
+        isOver == over
+
+        where:
+        players                                         | pit || over
+        [[0, 0, 0, 0, 0, 1, 10], [6, 5, 4, 3, 2, 1, 5]] | 5   || true
+        [[0, 0, 0, 0, 0, 2, 10], [6, 0, 0, 0, 0, 0, 5]] | 5   || true
+        [[1, 0, 0, 0, 0, 2, 10], [6, 5, 4, 3, 2, 1, 5]] | 5   || false
     }
 }
