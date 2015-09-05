@@ -1,4 +1,4 @@
-description = 'fill project description'
+description = 'BOL.com Game'
 
 apply plugin: 'java'
 // groovy is required for Spock
