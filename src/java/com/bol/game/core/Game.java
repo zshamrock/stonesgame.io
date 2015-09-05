@@ -1,4 +1,4 @@
-package com.bol.game;
+package com.bol.game.core;
 
 import java.util.Arrays;
 

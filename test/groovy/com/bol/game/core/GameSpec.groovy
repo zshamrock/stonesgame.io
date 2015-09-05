@@ -1,4 +1,4 @@
-package com.bol.game
+package com.bol.game.core
 
 import spock.lang.Specification
 import spock.lang.Unroll
