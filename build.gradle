@@ -1,0 +1,55 @@
+description = 'fill project description'
+
+apply plugin: 'java'
+// groovy is required for Spock
+apply plugin: 'groovy'
+
+apply from: 'gradle/code-coverage.gradle'
+apply from: 'gradle/code-quality.gradle'
+
+sourceCompatibility = targetCompatibility = 1.8
+
+version = '1.0.0'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+    }
+    test {
+        groovy {
+            srcDir 'test/groovy'
+        }
+    }
+}
+
+ext {
+    groovyMajorVersion = 2.4
+    groovyMinorVersion = 4
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile "org.codehaus.groovy:groovy-all:${groovyMajorVersion}.${groovyMinorVersion}"
+    testCompile "org.spockframework:spock-core:1.0-groovy-${groovyMajorVersion}"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
+
+task checkCoverage(dependsOn: ['test', 'jacocoTestReport']) {
+    description 'Runs all tests and JaCoCo coverage'
+    doLast {
+        def reports = [test, jacocoTestReport].collect({
+            def buildPath = buildDir.path
+            def buildDirName = buildPath[buildPath.lastIndexOf(File.separator)..-1]
+            '.' + buildDirName + it.reports.html.destination.path - buildPath
+        })
+        println "\n\tReports are avaialable at ${reports[0]} and ${reports[1]}"
+    }
+}
