@@ -19,7 +19,7 @@ pmd {
 }
 
 checkstyle {
-    toolVersion = '6.10.1'
+    toolVersion = '6.7'
 }
 
 findbugs {

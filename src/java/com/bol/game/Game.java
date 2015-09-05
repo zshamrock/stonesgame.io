@@ -24,11 +24,11 @@ public final class Game {
         for (int i = 1; i <= stones; i++) {
             pits[(pit + i) % TOTAL_PITS]++;
         }
-        final int land = ((pit + stones) % TOTAL_PITS);
+        final int land = (pit + stones) % TOTAL_PITS;
         if (land != SCORE_PIT) {
             final int next = (this.player + 1) % 2;
             if (pits[land] == 1) {
-                pits[SCORE_PIT] += (1 + this.players[next][land]);
+                pits[SCORE_PIT] += (1 + this.players[next][land]); // NOPMD
                 this.players[next][land] = 0;
                 pits[land] = 0;
             }
@@ -38,6 +38,9 @@ public final class Game {
     }
 
     public int[][] getPlayers() {
-        return new int[][]{Arrays.copyOf(this.players[0], TOTAL_PITS), Arrays.copyOf(this.players[1], TOTAL_PITS)};
+        return new int[][]{
+                Arrays.copyOf(this.players[0], TOTAL_PITS),
+                Arrays.copyOf(this.players[1], TOTAL_PITS)
+        };
     }
 }
