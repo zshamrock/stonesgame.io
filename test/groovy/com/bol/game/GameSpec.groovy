@@ -1,37 +1,46 @@
 package com.bol.game
 
-import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Subject
-
 
 class GameSpec extends Specification {
 
-    @Subject
-    @Shared
-    def game = new Game()
-
     def "make a turn in the beginning of a game"() {
+        given:
+        def game = new Game()
+
         when:
-        def p1 = new Player(pits1 as int[])
-        def p2 = new Player(pits2 as int[])
-        game.turn(p1, pit, p2)
+        game.pick(pit)
 
         then:
-        p1.pits == outcome as int[]
-        p2.pits == pits2 as int[]
+        game.players[0] == outcome as int[]
+        game.players[1] == pits2 as int[]
 
         where:
-        pits1                 | pit | pits2                 || outcome
-        [6, 6, 6, 6, 6, 6, 0] | 0   | [6, 6, 6, 6, 6, 6, 0] || [0, 7, 7, 7, 7, 7, 1]
-        [6, 6, 6, 6, 6, 6, 0] | 1   | [6, 6, 6, 6, 6, 6, 0] || [7, 0, 7, 7, 7, 7, 1]
-        [6, 6, 6, 6, 6, 6, 0] | 2   | [6, 6, 6, 6, 6, 6, 0] || [7, 7, 0, 7, 7, 7, 1]
-        [6, 6, 6, 6, 6, 6, 0] | 3   | [6, 6, 6, 6, 6, 6, 0] || [7, 7, 7, 0, 7, 7, 1]
-        [6, 6, 6, 6, 6, 6, 0] | 4   | [6, 6, 6, 6, 6, 6, 0] || [7, 7, 7, 7, 0, 7, 1]
-        [6, 6, 6, 6, 6, 6, 0] | 5   | [6, 6, 6, 6, 6, 6, 0] || [7, 7, 7, 7, 7, 0, 1]
+        pit | pits2                 || outcome
+        0   | [6, 6, 6, 6, 6, 6, 0] || [0, 7, 7, 7, 7, 7, 1]
+        1   | [6, 6, 6, 6, 6, 6, 0] || [7, 0, 7, 7, 7, 7, 1]
+        2   | [6, 6, 6, 6, 6, 6, 0] || [7, 7, 0, 7, 7, 7, 1]
+        3   | [6, 6, 6, 6, 6, 6, 0] || [7, 7, 7, 0, 7, 7, 1]
+        4   | [6, 6, 6, 6, 6, 6, 0] || [7, 7, 7, 7, 0, 7, 1]
+        5   | [6, 6, 6, 6, 6, 6, 0] || [7, 7, 7, 7, 7, 0, 1]
     }
 
-    def "result of a turn"() {
+    def "multiple rounds"() {
+        given:
+        def game = new Game()
 
+        when:
+        picks.each { pit ->
+            game.pick(pit)
+        }
+
+        then:
+        game.players[0] == pits1 as int[]
+        game.players[1] == pits2 as int[]
+
+        where:
+        picks = [0, 1, 2, 3, 4, 5]
+        pits1 = [4, 2, 10, 2, 1, 1, 12]
+        pits2 = [8, 1, 1, 8, 0, 8, 14]
     }
 }
