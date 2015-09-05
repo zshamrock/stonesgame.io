@@ -60,6 +60,31 @@ class GameSpec extends Specification {
         players                                         | pit || over
         [[0, 0, 0, 0, 0, 1, 10], [6, 5, 4, 3, 2, 1, 5]] | 5   || true
         [[0, 0, 0, 0, 0, 2, 10], [6, 0, 0, 0, 0, 0, 5]] | 5   || true
-        [[1, 0, 0, 0, 0, 2, 10], [6, 5, 4, 3, 2, 1, 5]] | 5   || false
+        [[1, 0, 0, 0, 0, 2, 10], [6, 5, 4, 3, 2, 1, 6]] | 5   || false
+    }
+
+    def "score of the game"() {
+        given:
+        def game = new Game(players as int[][])
+
+        when:
+        game.pick(pit)
+
+        then:
+        game.score == score as int[]
+
+        where:
+        players                                         | pit || score
+        [[0, 0, 0, 0, 0, 1, 10], [6, 5, 4, 3, 2, 1, 5]] | 5   || [11, 5]
+        [[0, 0, 0, 0, 0, 2, 10], [6, 0, 0, 0, 0, 0, 5]] | 5   || [18, 5]
+        [[1, 0, 0, 0, 0, 2, 10], [6, 5, 4, 3, 2, 1, 6]] | 5   || [11, 6]
+    }
+
+    def "score in the beginning of the game"() {
+        given:
+        def game = new Game()
+
+        expect:
+        game.score == [0, 0] as int[]
     }
 }

@@ -59,6 +59,10 @@ public final class Game {
         return Game.copyPlayers(this.players);
     }
 
+    public int[] getScore() {
+        return new int[]{this.players[0][SCORE_PIT], this.players[1][SCORE_PIT]};
+    }
+
     private static int[][] copyPlayers(final int[][] players) {
         return new int[][]{
                 Arrays.copyOf(players[0], TOTAL_PITS),
