@@ -2,7 +2,7 @@ package com.bol.game.core;
 
 import java.util.Arrays;
 
-public final class Game {
+public class Game {
 
     private static final int[] INITIAL_PITS = new int[]{6, 6, 6, 6, 6, 6, 0};
     private static final int TOTAL_PITS = INITIAL_PITS.length;
@@ -10,7 +10,7 @@ public final class Game {
 
     private final int[][] players;
 
-    private int player = 0;
+    protected int player = 0;
 
     public Game() {
         this.players = Game.copyPlayers(new int[][] {INITIAL_PITS, INITIAL_PITS});
