@@ -9,6 +9,7 @@
     ws.onopen = function(event) {
         console.log("Connection is open");
     };
+
     ws.onmessage = function(event) {
         console.log(event.data);
         var data = JSON.parse(event.data),
@@ -24,6 +25,9 @@
 
     ws.onclose = function(event) {
         console.log("Connection is closed");
+        var $waitingmsg = $("#waitingmsg");
+        $waitingmsg.text("Connection to server is closed, either your opponent has left or due inactivity timeout. " +
+            "Better to refresh the page to start a new game!");
     };
 
     function join(board, player, id) {
