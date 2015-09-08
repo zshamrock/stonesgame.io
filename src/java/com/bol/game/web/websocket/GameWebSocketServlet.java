@@ -24,7 +24,7 @@ public class GameWebSocketServlet extends WebSocketServlet implements WebSocketC
 
     @Override
     public void configure(WebSocketServletFactory factory) {
-        factory.getPolicy().setIdleTimeout(TimeUnit.MINUTES.toMillis(5));
+        factory.getPolicy().setIdleTimeout(TimeUnit.MINUTES.toMillis(3));
         factory.register(GameSocket.class);
         factory.setCreator(this);
     }
