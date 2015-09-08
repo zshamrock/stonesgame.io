@@ -8,6 +8,13 @@ mainClassName = 'com.bol.game.web.GameApplication'
 run {
     args = ['server', configFile]
 }
+run.doFirst {
+    def message = '|| Application is accessible via http://localhost:58080/, admin interface is accessible via http://localhost:58081/ ||'
+    def border = { println '=' * it.length() }
+    border message
+    println message
+    border message
+}
 
 task runServer(dependsOn: run) {
     description "Run a server, same as 'gradle run'"
