@@ -37,7 +37,19 @@ public class Game {
             }
             this.player = next;
         }
-        return this.isOver();
+        final boolean over = this.isOver();
+        if (over) {
+            collect(this.players[0]);
+            collect(this.players[1]);
+        }
+        return over;
+    }
+
+    private void collect(final int[] pits) {
+        for (int i = 0; i < SCORE_PIT; i++) {
+            pits[SCORE_PIT] += pits[i];
+            pits[i] = 0;
+        }
     }
 
     private boolean isOver() {

@@ -59,7 +59,7 @@ class GameSpec extends Specification {
         where:
         players                                         | pit || over
         [[0, 0, 0, 0, 0, 1, 10], [6, 5, 4, 3, 2, 1, 5]] | 5   || true
-        [[0, 0, 0, 0, 0, 2, 10], [6, 0, 0, 0, 0, 0, 5]] | 5   || true
+        [[0, 0, 0, 0, 0, 2, 10], [6, 0, 0, 0, 0, 1, 5]] | 5   || true
         [[0, 0, 0, 0, 1, 2, 10], [6, 0, 0, 0, 0, 0, 5]] | 5   || true
         [[1, 0, 0, 0, 0, 2, 10], [6, 5, 4, 3, 2, 1, 6]] | 5   || false
     }
@@ -76,9 +76,10 @@ class GameSpec extends Specification {
 
         where:
         players                                         | pit || score
-        [[0, 0, 0, 0, 0, 1, 10], [6, 5, 4, 3, 2, 1, 5]] | 5   || [11, 5]
-        [[0, 0, 0, 0, 0, 2, 10], [6, 0, 0, 0, 0, 0, 5]] | 5   || [18, 5]
+        [[0, 0, 0, 0, 0, 1, 10], [6, 5, 4, 3, 2, 1, 5]] | 5   || [11, 26]
+        [[0, 0, 0, 0, 0, 2, 10], [6, 0, 0, 0, 0, 1, 5]] | 5   || [18, 6]
         [[1, 0, 0, 0, 0, 2, 10], [6, 5, 4, 3, 2, 1, 6]] | 5   || [11, 6]
+        [[0, 0, 0, 0, 0, 2, 10], [6, 1, 7, 2, 3, 1, 5]] | 5   || [18, 19]
     }
 
     def "score in the beginning of the game"() {
@@ -87,5 +88,18 @@ class GameSpec extends Specification {
 
         expect:
         game.score == [0, 0] as int[]
+    }
+
+    def "board after game over"() {
+        given:
+        def game = new Game([[0, 0, 0, 0, 1, 0, 5], [6, 5, 4, 3, 2, 1, 8]] as int[][])
+
+        when:
+        def over = game.pick(4)
+
+        then:
+        over
+        game.getPlayers()[0] == [0, 0, 0, 0, 0, 0, 7] as int[]
+        game.getPlayers()[1] == [0, 0, 0, 0, 0, 0, 28] as int[]
     }
 }
