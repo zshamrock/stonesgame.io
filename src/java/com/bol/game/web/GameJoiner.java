@@ -3,6 +3,7 @@ package com.bol.game.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -31,6 +32,11 @@ public class GameJoiner implements Runnable {
                     game.start();
                     this.games.put(id, game);
                     LOGGER.info("New {} game has just started.", id);
+                } else {
+                    // put active player back to the queue, it might be that only one of the players disconnected,
+                    // while another one is still waiting to join, otherwise he is being removed from the queue
+                    // will never join a game ever, unless he reconnects with a new connection/session
+                    Arrays.stream(new Player[]{p1, p2}).filter(Player::isReady).forEach(this.players::offer);
                 }
             } catch (InterruptedException ex) {
                 LOGGER.warn("Leaving game joiner, no more players can join the game.", ex);

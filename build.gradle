@@ -25,12 +25,16 @@ sourceSets {
         groovy {
             srcDir 'test/groovy'
         }
+        java {
+            srcDir 'test/java'
+        }
     }
 }
 
 ext {
     groovyMajorVersion = 2.4
     groovyMinorVersion = 4
+    jettyVersion = '9.2.9.v20150224'
 }
 
 repositories {
@@ -38,14 +42,15 @@ repositories {
 }
 
 dependencies {
-    // dropwizard modules required
+    // required dropwizard modules
     ['core', 'views', 'assets'].each { module ->
         compile "io.dropwizard:dropwizard-$module:0.8.4"
     }
-    compile 'org.eclipse.jetty.websocket:websocket-server:9.2.9.v20150224'
+    compile "org.eclipse.jetty.websocket:websocket-server:$jettyVersion"
 
     testCompile "org.codehaus.groovy:groovy-all:${groovyMajorVersion}.${groovyMinorVersion}"
     testCompile "org.spockframework:spock-core:1.0-groovy-${groovyMajorVersion}"
+    testCompile "org.eclipse.jetty.websocket:websocket-client:$jettyVersion"
 }
 
 task wrapper(type: Wrapper) {
