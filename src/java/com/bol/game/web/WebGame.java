@@ -36,8 +36,8 @@ public class WebGame extends Game {
         try {
             final int[][] board = super.getPlayers();
             final int[] score = this.getScore();
-            current.go(board, over, score[0] > score[1]);
-            opponent.idle(board, over, score[0] < score[1]);
+            current.go(board, over, score[current.getNum()] > score[opponent.getNum()]);
+            opponent.idle(board, over, score[opponent.getNum()] > score[current.getNum()]);
         } catch (IOException ex) {
             LOGGER.error("Pick a pit {} for game {} failed.", pit, this.id, ex);
             LOGGER.info("Closing a game {}.", this.id);

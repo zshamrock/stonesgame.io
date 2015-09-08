@@ -21,6 +21,10 @@ public class Player {
         this.num = num;
     }
 
+    public int getNum() {
+        return this.num;
+    }
+
     public void join(WebGame game) throws IOException {
         this.game = game;
         session.getRemote().sendString(this.mapper.writeValueAsString(ImmutableMap.of(

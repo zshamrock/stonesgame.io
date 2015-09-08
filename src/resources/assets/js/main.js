@@ -76,7 +76,8 @@
             message;
         drawBoard(board, player, id);
         if (over) {
-            console.log("Game " + id + "is over. You " + (won ? "has won" : "didn't win" + "."));
+            console.log("Game " + id + "is over. You " + (won ? "won" : "didn't win" + "."));
+            $waitingmsg.text((won ? "Congratulations! You won!" : "Keep trying!") + " (for a new game refresh a page)");
             return;
         }
         if (action === "go") {
