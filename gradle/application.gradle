@@ -1,0 +1,21 @@
+apply plugin: 'application'
+
+ext {
+    configFile = 'game.yaml'
+}
+
+mainClassName = 'com.bol.game.web.GameApplication'
+run {
+    args = ['server', configFile]
+}
+
+task runServer(dependsOn: run) {
+    description "Run a server, same as 'gradle run'"
+}
+
+task runCheck(type: JavaExec) {
+    description 'Check dropwizard application configuration'
+    main = mainClassName
+    classpath = tasks.run.classpath
+    args = ['check', configFile]
+}
