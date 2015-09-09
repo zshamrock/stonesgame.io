@@ -69,7 +69,7 @@ class GameApplicationSpec extends Specification {
         client.connect(player2)
 
         then:
-        joinLatch.await(5, TimeUnit.SECONDS)
+        joinLatch.await(10, TimeUnit.SECONDS)
         def json = new JsonSlurper()
         verifyJoinMessages(json.parseText(player1.messages[0] as String), json.parseText(player2.messages[0] as String))
         verifyGoAndWaitMessages(json.parseText(player1.messages[1] as String), json.parseText(player2.messages[1] as String))
@@ -119,7 +119,7 @@ class GameApplicationSpec extends Specification {
     }
 
     private class JoinGameWebSocket extends WebSocketAdapter {
-        def messages = []
+        def volatile messages = []
         CountDownLatch joinLatch
         def num
 
