@@ -5,7 +5,7 @@
         alert("Your browser doesn't support Web Sockets! Check http://caniuse.com/#search=websockets for the supported browser!");
         return;
     }
-    ws = new WebSocket("ws://localhost:58080/game");
+    ws = new WebSocket("ws://bolgame.herokuapp.com/game");
     ws.onopen = function(event) {
         console.log("Connection is open");
     };
