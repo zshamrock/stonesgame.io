@@ -7,6 +7,7 @@ apply plugin: 'groovy'
 apply from: 'gradle/code-coverage.gradle'
 apply from: 'gradle/code-quality.gradle'
 apply from: 'gradle/application.gradle'
+apply from: 'gradle/heroku.gradle'
 
 sourceCompatibility = targetCompatibility = 1.8
 
