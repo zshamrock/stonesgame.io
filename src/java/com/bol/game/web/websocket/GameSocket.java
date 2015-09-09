@@ -42,8 +42,13 @@ public class GameSocket {
     @OnWebSocketConnect
     public void join(Session session) throws InterruptedException {
         this.player = new Player(session, this.mapper);
-        players.offer(this.player, 1, TimeUnit.SECONDS);
-        LOGGER.info("Connect :: Added a player to the players queue.");
+        final boolean added = players.offer(this.player, 1, TimeUnit.SECONDS);
+        if (added) {
+            LOGGER.info("Connect :: Added a player to the players queue.");
+        } else {
+            LOGGER.warn("Player was not added to the queue due to the capacity limit.");
+            session.close();
+        }
     }
 
     @OnWebSocketMessage
