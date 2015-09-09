@@ -76,7 +76,7 @@ class GameApplicationSpec extends Specification {
 
         cleanup:
         player1.getSession().close()
-        player2.getSession().close()
+        player2.getSession()?.close()
     }
 
     void verifyJoinMessages(msg1, msg2) {
@@ -166,7 +166,7 @@ class GameApplicationSpec extends Specification {
 
         cleanup:
         player1.getSession().close()
-        player2.getSession().close()
+        player2.getSession()?.close()
     }
 
     private class TurnGameWebSocket extends WebSocketAdapter {
