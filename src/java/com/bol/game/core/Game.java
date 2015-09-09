@@ -39,8 +39,8 @@ public class Game {
         }
         final boolean over = this.isOver();
         if (over) {
-            collect(this.players[0]);
-            collect(this.players[1]);
+            this.collect(this.players[0]);
+            this.collect(this.players[1]);
         }
         return over;
     }

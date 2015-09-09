@@ -14,7 +14,7 @@ public class GameJoiner implements Runnable {
     private final BlockingQueue<Player> players;
     private final ConcurrentMap<UUID, WebGame> games;
 
-    public GameJoiner(BlockingQueue<Player> players, ConcurrentMap<UUID, WebGame> games) {
+    public GameJoiner(final BlockingQueue<Player> players, final ConcurrentMap<UUID, WebGame> games) {
         this.players = players;
         this.games = games;
     }
@@ -38,10 +38,10 @@ public class GameJoiner implements Runnable {
                     // will never join a game ever, unless he reconnects with a new connection/session
                     Arrays.stream(new Player[]{p1, p2}).filter(Player::isReady).forEach(this.players::offer);
                 }
-            } catch (InterruptedException ex) {
+            } catch (final InterruptedException ex) {
                 LOGGER.warn("Leaving game joiner, no more players can join the game.", ex);
                 break;
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 LOGGER.warn("Failed to join.", ex);
             }
         }

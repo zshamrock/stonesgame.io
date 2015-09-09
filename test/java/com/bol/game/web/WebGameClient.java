@@ -21,8 +21,8 @@ public class WebGameClient {
         this.client.stop();
     }
 
-    public void connect(Object socket) throws Exception {
-        ClientUpgradeRequest request = new ClientUpgradeRequest();
+    public void connect(final Object socket) throws Exception {
+        final ClientUpgradeRequest request = new ClientUpgradeRequest();
         this.client.connect(socket, new URI(ENDPOINT), request);
     }
 }

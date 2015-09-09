@@ -12,12 +12,12 @@ public class Player {
     private final Session session;
     private final ObjectMapper mapper;
 
-    public Player(Session session, ObjectMapper mapper) {
+    public Player(final Session session, final ObjectMapper mapper) {
         this.session = session;
         this.mapper = mapper;
     }
 
-    public void setNum(int num) {
+    public void setNum(final int num) {
         this.num = num;
     }
 
@@ -25,24 +25,24 @@ public class Player {
         return this.num;
     }
 
-    public void join(WebGame game) throws IOException {
+    public void join(final WebGame game) throws IOException {
         this.game = game;
-        session.getRemote().sendString(this.mapper.writeValueAsString(ImmutableMap.of(
+        this.session.getRemote().sendString(this.mapper.writeValueAsString(ImmutableMap.of(
                 "action", "join",
                 "board", game.getPlayers(),
                 "player", this.num,
                 "id", game.getId())));
     }
 
-    public void go(int[][] board, boolean over, boolean won) throws IOException {
+    public void go(final int[][] board, final boolean over, final boolean won) throws IOException {
         this.send("go", board, over, won);
     }
 
-    public void idle(int[][] board, boolean over, boolean won) throws IOException {
+    public void idle(final int[][] board, final boolean over, final boolean won) throws IOException {
         this.send("wait", board, over, won);
     }
 
-    private void send(String action, int[][] board, boolean over, boolean won) throws IOException {
+    private void send(final String action, final int[][] board, final boolean over, final boolean won) throws IOException {
         this.session.getRemote().sendString(this.mapper.writeValueAsString(ImmutableMap.builder()
                 .put("action", action)
                 .put("board", board)

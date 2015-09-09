@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @WebSocket
 public class GameSocket {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(GameSocket.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameSocket.class);
     public static final MapType MESSAGE_TYPE = MapType.construct(
             HashMap.class, SimpleType.construct(String.class), SimpleType.construct(String.class));
 
@@ -33,16 +33,16 @@ public class GameSocket {
     private final ObjectMapper mapper;
     private Player player;
 
-    public GameSocket(BlockingQueue<Player> players, ConcurrentMap<UUID, WebGame> games, ObjectMapper mapper) {
+    public GameSocket(final BlockingQueue<Player> players, final ConcurrentMap<UUID, WebGame> games, final ObjectMapper mapper) {
         this.players = players;
         this.games = games;
         this.mapper = mapper;
     }
 
     @OnWebSocketConnect
-    public void join(Session session) throws InterruptedException {
+    public void join(final Session session) throws InterruptedException {
         this.player = new Player(session, this.mapper);
-        final boolean added = players.offer(this.player, 1, TimeUnit.SECONDS);
+        final boolean added = this.players.offer(this.player, 1, TimeUnit.SECONDS);
         if (added) {
             LOGGER.info("Connect :: Added a player to the players queue.");
         } else {
@@ -52,17 +52,17 @@ public class GameSocket {
     }
 
     @OnWebSocketMessage
-    public void turn(String message) throws IOException {
+    public void turn(final String message) throws IOException {
         LOGGER.info("Message :: Action received {}.", message);
         final Map<String, String> msg = this.mapper.readValue(message, MESSAGE_TYPE);
         final String action = msg.get("action");
-        final WebGame game = player.getGame();
+        final WebGame game = this.player.getGame();
         switch (action) {
             case "pick":
                 final String pit = msg.get("pit");
                 final boolean over = game.pick(Integer.parseInt(pit));
                 if (over) {
-                    games.remove(game.getId());
+                    this.games.remove(game.getId());
                 }
                 break;
             default:
@@ -71,7 +71,7 @@ public class GameSocket {
     }
 
     @OnWebSocketClose
-    public void leaving(int closeCode, String closeReason) {
+    public void leaving(final int closeCode, final String closeReason) {
         LOGGER.info("Close :: Leaving with {} {}.", closeCode, closeReason);
         this.player.getGame().over();
         this.games.remove(this.player.getGame().getId());

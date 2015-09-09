@@ -4,7 +4,11 @@ import com.bol.game.web.Player;
 import com.bol.game.web.WebGame;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.eclipse.jetty.websocket.servlet.*;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
+import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
+import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
+import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
+import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
@@ -19,21 +23,21 @@ public class GameWebSocketServlet extends WebSocketServlet implements WebSocketC
     private final ConcurrentMap<UUID, WebGame> games;
     private final ObjectMapper mapper;
 
-    public GameWebSocketServlet(BlockingQueue<Player> players, ConcurrentMap<UUID, WebGame> games, ObjectMapper mapper) {
+    public GameWebSocketServlet(final BlockingQueue<Player> players, final ConcurrentMap<UUID, WebGame> games, final ObjectMapper mapper) {
         this.players = players;
         this.games = games;
         this.mapper = mapper;
     }
 
     @Override
-    public void configure(WebSocketServletFactory factory) {
+    public void configure(final WebSocketServletFactory factory) {
         factory.getPolicy().setIdleTimeout(TimeUnit.MINUTES.toMillis(3));
         factory.register(GameSocket.class);
         factory.setCreator(this);
     }
 
     @Override
-    public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
+    public Object createWebSocket(final ServletUpgradeRequest req, final ServletUpgradeResponse resp) {
         return new GameSocket(this.players, this.games, this.mapper);
     }
 

@@ -14,7 +14,7 @@ public class WebGame extends Game {
     private final UUID id;
     private final Player[] players;
 
-    public WebGame(UUID id, Player p1, Player p2) throws IOException {
+    public WebGame(final UUID id, final Player p1, final Player p2) throws IOException {
         this.id = id;
         this.players = new Player[]{p1, p2};
         this.players[0].setNum(0);
@@ -29,16 +29,16 @@ public class WebGame extends Game {
     }
 
     @Override
-    public boolean pick(int pit) {
+    public boolean pick(final int pit) {
         final boolean over = super.pick(pit);
-        Player current = this.players[this.player];
-        Player opponent = this.players[(this.player + 1) % 2];
+        final Player current = this.players[this.player];
+        final Player opponent = this.players[(this.player + 1) % 2];
         try {
             final int[][] board = super.getPlayers();
             final int[] score = this.getScore();
             current.go(board, over, score[current.getNum()] > score[opponent.getNum()]);
             opponent.idle(board, over, score[opponent.getNum()] > score[current.getNum()]);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             LOGGER.error("Pick a pit {} for game {} failed.", pit, this.id, ex);
             LOGGER.info("Closing a game {}.", this.id);
             return true;
