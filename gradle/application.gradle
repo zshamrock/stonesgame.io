@@ -5,6 +5,7 @@ ext {
 }
 
 mainClassName = 'com.bol.game.web.GameApplication'
+applicationDefaultJvmArgs = ["-Ddw.server.applicationConnectors[0].port=$System.env.PORT"]
 run {
     args = ['server', configFile]
 }
