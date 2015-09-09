@@ -2,7 +2,7 @@ server:
   rootPath: /game/*
   applicationConnectors:
     - type: http
-      port: 58080
+      port: 80
   adminConnectors:
     - type: http
-      port: 58081
+      port: 8080
