@@ -1,5 +1,5 @@
 package com.bol.game.web
-
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.WebSocketAdapter
@@ -61,6 +61,7 @@ class GameApplicationSpec extends Specification {
         def joinLatch = new CountDownLatch(4)
         def player1 = new JoinGameWebSocket(num: 1, joinLatch: joinLatch)
         def player2 = new JoinGameWebSocket(num: 2, joinLatch: joinLatch)
+        def json = new JsonSlurper()
 
         when:
         client.connect(player1)
@@ -69,8 +70,7 @@ class GameApplicationSpec extends Specification {
         client.connect(player2)
 
         then:
-        joinLatch.await(10, TimeUnit.SECONDS)
-        def json = new JsonSlurper()
+        joinLatch.await(1, TimeUnit.MINUTES)
         verifyJoinMessages(json.parseText(player1.messages[0] as String), json.parseText(player2.messages[0] as String))
         verifyGoAndWaitMessages(json.parseText(player1.messages[1] as String), json.parseText(player2.messages[1] as String))
 
@@ -132,4 +132,75 @@ class GameApplicationSpec extends Specification {
             joinLatch.countDown()
         }
     }
+
+    def "be able to do multiple turns"() {
+        setup:
+        def turnLatch = new CountDownLatch(12)
+        def player1 = new TurnGameWebSocket(num: 1, maxTurns: 2, turnLatch: turnLatch)
+        def player2 = new TurnGameWebSocket(num: 2, maxTurns: 2, turnLatch: turnLatch)
+        def json = new JsonSlurper()
+
+        when:
+        client.connect(player1)
+        // be sure player1 joined as a first player
+        TimeUnit.SECONDS.sleep(5)
+
+        and:
+        client.connect(player2)
+
+        then:
+        turnLatch.await(1, TimeUnit.MINUTES)
+        player1.messages.size() == 6
+        player2.messages.size() == 6
+
+        def msg1 = json.parseText(player1.messages[-1] as String)
+        def msg2 = json.parseText(player2.messages[-1] as String)
+
+        msg1.board == msg2.board
+        msg1.id == msg2.id
+        msg1.player == 0
+        msg2.player == 1
+        msg1.board == [[1, 0, 8, 8, 8, 8, 9],[0, 0, 8, 7, 7, 7, 1]]
+        player1.actions == ['join', 'go', 'go', 'wait', 'wait', 'go']
+        player2.actions == ['join', 'wait', 'wait', 'go', 'go', 'wait']
+
+        cleanup:
+        player1.getSession().close()
+        player2.getSession().close()
+    }
+
+    private class TurnGameWebSocket extends WebSocketAdapter {
+        def volatile messages = []
+        CountDownLatch turnLatch
+        def num
+        def maxTurns
+        def turns = 0
+        def json = new JsonSlurper()
+        def volatile actions = []
+
+        @Override
+        void onWebSocketText(String message) {
+            // {"action":"join","board":[[6,6,6,6,6,6,0],[6,6,6,6,6,6,0]],"player":0,"id":"22537dc3-2eb3-40f0-aed5-c06e1626ad7e"}
+            // {"action":"go","board":[[6,6,6,6,6,6,0],[6,6,6,6,6,6,0]],"over":false,"won":false,"player":0,"id":"22537dc3-2eb3-40f0-aed5-c06e1626ad7e"}
+            // or
+            // {"action":"wait","board":[[6,6,6,6,6,6,0],[6,6,6,6,6,6,0]],"over":false,"won":false,"player":1,"id":"22537dc3-2eb3-40f0-aed5-c06e1626ad7e"}
+            this.messages << message
+            println "Player$num received $message"
+            def msg = json.parseText(message)
+            actions << msg.action
+            if (turns == maxTurns && msg.action == 'go') {
+                turnLatch.countDown()
+                return
+            }
+
+            def pit = msg.board[msg.player].findIndexOf { it != 0 }
+            if (msg.action == 'go') {
+                def pick = JsonOutput.toJson([action: 'pick', pit: pit, id: msg.id])
+                turns++
+                getRemote().sendString(pick)
+            }
+            turnLatch.countDown()
+        }
+    }
+
 }
