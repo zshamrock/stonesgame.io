@@ -16,9 +16,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 
 public class GameApplication extends Application<GameConfiguration> {
-    private BlockingQueue<Player> players = new ArrayBlockingQueue<>(100);
-    private ConcurrentMap<UUID, WebGame> games = new ConcurrentHashMap<>();
-
+    private final BlockingQueue<Player> players = new ArrayBlockingQueue<>(100);
+    private final ConcurrentMap<UUID, WebGame> games = new ConcurrentHashMap<>();
 
     public static void main(final String[] args) throws Exception {
         new GameApplication().run(args);
@@ -47,7 +46,7 @@ public class GameApplication extends Application<GameConfiguration> {
     }
 
     private void registerMetrics(final Environment environment) {
-        environment.metrics().register("active.games", (Gauge<Integer>) () -> GameApplication.this.games.size());
+        environment.metrics().register("active.games", (Gauge<Integer>) GameApplication.this.games::size);
     }
 
     @Override
