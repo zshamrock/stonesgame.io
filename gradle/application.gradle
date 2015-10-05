@@ -5,12 +5,12 @@ ext {
 }
 
 mainClassName = 'com.bol.game.web.GameApplication'
-applicationDefaultJvmArgs = ["-Ddw.server.applicationConnectors[0].port=$System.env.PORT"]
+applicationDefaultJvmArgs = ["-Ddw.server.applicationConnectors[0].port=${runPort()}"]
 run {
     args = ['server', configFile]
 }
 run.doFirst {
-    def message = '|| Application is accessible via http://localhost:58080/, admin interface is accessible via http://localhost:58081/ ||'
+    def message = "|| Application is accessible via http://localhost:${runPort()}/, admin interface is accessible via http://localhost:58081/ ||"
     def border = { println '=' * it.length() }
     border message
     println message

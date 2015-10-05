@@ -4,6 +4,10 @@ apply plugin: 'java'
 // groovy is required for Spock
 apply plugin: 'groovy'
 
+ext {
+    defaultRunPort = 58080
+}
+
 apply from: 'gradle/code-coverage.gradle'
 apply from: 'gradle/code-quality.gradle'
 apply from: 'gradle/application.gradle'
@@ -72,3 +76,15 @@ task checkCoverage(dependsOn: ['test', 'jacocoTestReport']) {
         println "\n\tReports are avaialable at ${reports[0]} and ${reports[1]}"
     }
 }
+
+// for Ant filter
+import org.apache.tools.ant.filters.ReplaceTokens
+
+processResources {
+    filter(ReplaceTokens, tokens: [host: "${System.env.HOST ?: "localhost:${runPort()}"}" as String])
+}
+
+def runPort() {
+    System.env.PORT ?: defaultRunPort
+}
+
