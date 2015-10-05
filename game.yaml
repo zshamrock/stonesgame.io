@@ -6,3 +6,10 @@ server:
   adminConnectors:
     - type: http
       port: 58081
+metrics:
+  frequency: 5 minutes
+  reporters:
+    - type: console
+      timeZone: UTC
+      output: stdout
+queueCapacity: 100
