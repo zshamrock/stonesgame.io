@@ -1,11 +1,16 @@
-(function() {
+var Config = Config || {};
+Config.host = "@host@";
+
+(function(Config) {
     "use strict";
     var ws;
     if (!Modernizr.websockets) {
         alert("Your browser doesn't support Web Sockets! Check http://caniuse.com/#search=websockets for the supported browser!");
         return;
     }
-    ws = new WebSocket("ws://bolgame.herokuapp.com/game");
+    console.log("Connecting to " + Config.host);
+    //ws = new WebSocket("ws://bolgame.herokuapp.com/game");
+    ws = new WebSocket("ws://" + Config.host + "/game");
     ws.onopen = function(event) {
         console.log("Connection is open");
     };
@@ -97,4 +102,4 @@
         console.log("pick " + pit + " for " + id);
         ws.send(JSON.stringify({action: "pick", pit: pit, id: id}));
     }
-})();
+})(Config);
