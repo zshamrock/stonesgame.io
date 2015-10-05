@@ -1,2 +1,3 @@
-task stage << {
+task stage {
+    description 'Required for Heroku to deploy and run the application'
 }
