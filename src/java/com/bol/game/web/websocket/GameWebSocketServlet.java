@@ -2,6 +2,8 @@ package com.bol.game.web.websocket;
 
 import com.bol.game.web.Player;
 import com.bol.game.web.WebGame;
+
+import com.codahale.metrics.Meter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
@@ -22,11 +24,18 @@ public class GameWebSocketServlet extends WebSocketServlet implements WebSocketC
     @SuppressFBWarnings("SE_BAD_FIELD")
     private final ConcurrentMap<UUID, WebGame> games;
     private final ObjectMapper mapper;
+    @SuppressFBWarnings("SE_BAD_FIELD")
+    private final Meter requests;
 
-    public GameWebSocketServlet(final BlockingQueue<Player> players, final ConcurrentMap<UUID, WebGame> games, final ObjectMapper mapper) {
+    public GameWebSocketServlet(
+            final BlockingQueue<Player> players,
+            final ConcurrentMap<UUID, WebGame> games,
+            final ObjectMapper mapper,
+            final Meter requests) {
         this.players = players;
         this.games = games;
         this.mapper = mapper;
+        this.requests = requests;
     }
 
     @Override
@@ -38,6 +47,7 @@ public class GameWebSocketServlet extends WebSocketServlet implements WebSocketC
 
     @Override
     public Object createWebSocket(final ServletUpgradeRequest req, final ServletUpgradeResponse resp) {
+        this.requests.mark();
         return new GameSocket(this.players, this.games, this.mapper);
     }
 

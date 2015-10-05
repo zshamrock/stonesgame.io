@@ -2,6 +2,8 @@ package com.bol.game.web.websocket;
 
 import com.bol.game.web.Player;
 import com.bol.game.web.WebGame;
+import com.bol.game.web.WebPlayer;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.SimpleType;
@@ -33,7 +35,8 @@ public class GameSocket {
     private final ObjectMapper mapper;
     private Player player;
 
-    public GameSocket(final BlockingQueue<Player> players, final ConcurrentMap<UUID, WebGame> games, final ObjectMapper mapper) {
+    public GameSocket(
+            final BlockingQueue<Player> players, final ConcurrentMap<UUID, WebGame> games, final ObjectMapper mapper) {
         this.players = players;
         this.games = games;
         this.mapper = mapper;
@@ -41,7 +44,7 @@ public class GameSocket {
 
     @OnWebSocketConnect
     public void join(final Session session) throws InterruptedException {
-        this.player = new Player(session, this.mapper);
+        this.player = new WebPlayer(session, this.mapper);
         final boolean added = this.players.offer(this.player, 1, TimeUnit.SECONDS);
         if (added) {
             LOGGER.info("Connect :: Added a player to the players queue.");

@@ -25,7 +25,7 @@ class GameApplicationSpec extends Specification {
         app.run("server", "game.yaml")
 
         // wait for server to start up
-        Thread.sleep(TimeUnit.SECONDS.toMillis(5))
+        TimeUnit.SECONDS.sleep(5)
 
         client.start()
     }
