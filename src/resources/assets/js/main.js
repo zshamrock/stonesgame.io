@@ -9,7 +9,6 @@ Config.host = "@host@";
         return;
     }
     console.log("Connecting to " + Config.host);
-    //ws = new WebSocket("ws://bolgame.herokuapp.com/game");
     ws = new WebSocket("ws://" + Config.host + "/game");
     ws.onopen = function(event) {
         console.log("Connection is open");
