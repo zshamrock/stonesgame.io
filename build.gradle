@@ -1,4 +1,4 @@
-description = 'BOL.com Game'
+description = 'Stones Game - a massive online multiplayer game'
 
 apply plugin: 'java'
 // groovy is required for Spock
