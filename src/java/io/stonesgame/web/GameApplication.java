@@ -1,5 +1,6 @@
 package io.stonesgame.web;
 
+import io.stonesgame.bots.Bots;
 import io.stonesgame.web.health.HealthCheckPlayer;
 import io.stonesgame.web.health.PlayersQueueCapacityHealthCheck;
 import io.stonesgame.web.websocket.GameWebSocketServlet;
@@ -17,6 +18,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletRegistration;
 
 public class GameApplication extends Application<GameConfiguration> {
@@ -36,6 +39,7 @@ public class GameApplication extends Application<GameConfiguration> {
         this.registerMetrics(environment);
         this.registerHealthChecks(configuration, environment);
         this.runGameJoiner(environment);
+        this.runBots(configuration, environment);
         this.registerGameWebSocketServlet(environment);
     }
 
@@ -60,6 +64,20 @@ public class GameApplication extends Application<GameConfiguration> {
                 .maxThreads(1)
                 .build();
         executorService.execute(new GameJoiner(this.players, this.games));
+    }
+
+    private void runBots(final GameConfiguration configuration, final Environment environment) {
+        if (configuration.isBotsEnabled()) {
+            final ScheduledExecutorService scheduledExecutorService = environment.lifecycle()
+                    .scheduledExecutorService("bots-%d")
+                    .threads(1)
+                    .build();
+            scheduledExecutorService.scheduleAtFixedRate(
+                    new Bots(this.players),
+                    Bots.INITIAL_DELAY_IN_SECONDS,
+                    Bots.SCHEDULED_PERIOD_IN_SECONDS,
+                    TimeUnit.SECONDS);
+        }
     }
 
     private void registerMetrics(final Environment environment) {

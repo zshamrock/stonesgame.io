@@ -32,4 +32,8 @@ public class GameConfiguration extends Configuration {
     public void setQueueCapacity(final int queueCapacity) {
         this.queueCapacity = queueCapacity;
     }
+
+    public boolean isBotsEnabled() {
+        return true;
+    }
 }

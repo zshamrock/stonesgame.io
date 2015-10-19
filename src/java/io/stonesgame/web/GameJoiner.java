@@ -27,6 +27,17 @@ public class GameJoiner implements Runnable {
                 final Player p1 = this.players.take();
                 final Player p2 = this.players.take();
                 if (p1.isReady() && p2.isReady()) {
+                    if (p1.isBot() && p2.isBot()) {
+                        // does not make sense to create a game with 2 bots playing with each other
+                        // adding one bot back into the players queue, while "removing" another,
+                        // so reduce the number of bots in such case
+                        final boolean added = this.players.offer(p1);
+                        LOGGER.info(added
+                                ? "Offer a bot back to the players queue."
+                                : "Bot was not put back into the players queue due to the queue capacity restriction.");
+                        p2.over();
+                        continue;
+                    }
                     final UUID id = UUID.randomUUID();
                     final WebGame game = new WebGame(id, p1, p2);
                     game.start();

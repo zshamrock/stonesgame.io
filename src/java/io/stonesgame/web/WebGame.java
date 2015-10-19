@@ -23,22 +23,26 @@ public class WebGame extends Game {
     }
 
     public void start() throws IOException {
-        this.players[0].join(this);
         this.players[1].join(this);
-        this.players[0].go(this.getPlayers(), false, false);
+        this.players[0].join(this);
+        // "idle" on the player must go before calling "go" on another player,
+        // as if the "go" player replies too fast (as was in the case of bot),
+        // the state of second player will be corrupted, as "pick" from the "go" player will set the state of "idle"
+        // player to "go", but then, if the idle went after go, it would overwrite correct "go" state back to "idle"
         this.players[1].idle(this.getPlayers(), false, false);
+        this.players[0].go(this.getPlayers(), false, false);
     }
 
     @Override
     public boolean pick(final int pit) {
         final boolean over = super.pick(pit);
-        final Player current = this.players[this.player];
-        final Player opponent = this.players[(this.player + 1) % 2];
+        final Player active = this.players[this.player];
+        final Player passive = this.players[(this.player + 1) % 2];
         try {
             final int[][] board = super.getPlayers();
             final int[] score = this.getScore();
-            current.go(board, over, score[current.getNum()] > score[opponent.getNum()]);
-            opponent.idle(board, over, score[opponent.getNum()] > score[current.getNum()]);
+            passive.idle(board, over, score[passive.getNum()] > score[active.getNum()]);
+            active.go(board, over, score[active.getNum()] > score[passive.getNum()]);
         } catch (final IOException ex) {
             LOGGER.error("Pick a pit {} for game {} failed.", pit, this.id, ex);
             LOGGER.info("Closing a game {}.", this.id);

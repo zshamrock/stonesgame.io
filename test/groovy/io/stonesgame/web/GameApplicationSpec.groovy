@@ -3,10 +3,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.WebSocketAdapter
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Stepwise
-import spock.lang.Subject
+import spock.lang.*
 
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -36,7 +33,7 @@ class GameApplicationSpec extends Specification {
     }
 
     def "be able to connect to the server"() {
-        setup:
+        setup: "a connect latch and socket connection"
         def connectLatch = new CountDownLatch(1)
         def socket = new WebSocketAdapter() {
             @Override
@@ -46,35 +43,35 @@ class GameApplicationSpec extends Specification {
             }
         }
 
-        when:
+        when: "web client connects to a server"
         client.connect(socket)
 
-        then:
+        then: "connect latch is released"
         connectLatch.await(5, TimeUnit.SECONDS)
 
-        cleanup:
+        cleanup: "socket's connection"
         socket.getSession().close()
     }
 
     def "be able join a game"() {
-        setup:
+        setup: "2 players and join latch"
         def joinLatch = new CountDownLatch(4)
         def player1 = new JoinGameWebSocket(num: 1, joinLatch: joinLatch)
         def player2 = new JoinGameWebSocket(num: 2, joinLatch: joinLatch)
         def json = new JsonSlurper()
 
-        when:
+        when: "player1 joins a game"
         client.connect(player1)
 
-        and:
+        and: "player2 joins a game"
         client.connect(player2)
 
-        then:
+        then: "join latch is released and join, go, and wait messages are received"
         joinLatch.await(1, TimeUnit.MINUTES)
         verifyJoinMessages(json.parseText(player1.messages[0] as String), json.parseText(player2.messages[0] as String))
         verifyGoAndWaitMessages(json.parseText(player1.messages[1] as String), json.parseText(player2.messages[1] as String))
 
-        cleanup:
+        cleanup: "sockets' connections"
         player1.getSession().close()
         player2.getSession()?.close()
     }
@@ -201,6 +198,36 @@ class GameApplicationSpec extends Specification {
             }
             turnLatch.countDown()
         }
+    }
+
+    @Timeout(120)
+    def "play with a bot"() {
+        setup: "a new player ready to join a game and a latch to track the messages"
+        def turnLatch = new CountDownLatch(6)
+        def player = new TurnGameWebSocket(num: 1, maxTurns: 2, turnLatch: turnLatch)
+        def json = new JsonSlurper()
+
+        when: "a player joins a game and waiting for the bot"
+        client.connect(player)
+
+        // here we await for latch not in "then" block, as it might as well await due to timeout,
+        // due to bot's "unpredictable" behaviour
+        and: "latch is released"
+        turnLatch.await(1, TimeUnit.MINUTES)
+
+        then: "actions are verified"
+        // as bot is "unpredictable" (non-constant seed) could result in different player's actions
+        player.actions in [['join', 'go', 'go', 'wait', 'go'], ['join', 'go', 'go', 'wait', 'wait', 'go']]
+
+        and: "last go message is checked"
+        def msg = json.parseText(player.messages[-1] as String)
+        msg.player == 0
+        // board is not in the initial position
+        msg.board != [[6,6,6,6,6,6,0], [6,6,6,6,6,6,0]]
+        msg.board[0].sum() + msg.board[1].sum() == 72 // total stones
+
+        cleanup: "socket's connection"
+        player.getSession().close()
     }
 
 }

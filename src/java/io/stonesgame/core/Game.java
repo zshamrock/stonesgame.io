@@ -20,6 +20,10 @@ public class Game {
         this.players = Game.copyPlayers(players);
     }
 
+    /**
+     * Mutating the state of the game - setting the internal active player variable based on who is going to go next.
+     * @return whether the game is over by making the move
+     */
     public boolean pick(final int pit) {
         final int[] pits = this.players[this.player];
         final int stones = pits[pit];

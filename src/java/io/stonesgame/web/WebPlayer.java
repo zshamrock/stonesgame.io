@@ -6,25 +6,14 @@ import org.eclipse.jetty.websocket.api.Session;
 
 import java.io.IOException;
 
-public class WebPlayer implements Player {
+public class WebPlayer extends BasicPlayer implements Player {
     private volatile WebGame game;
-    private volatile int num;
     private final Session session;
     private final ObjectMapper mapper;
 
     public WebPlayer(final Session session, final ObjectMapper mapper) {
         this.session = session;
         this.mapper = mapper;
-    }
-
-    @Override
-    public void setNum(final int num) {
-        this.num = num;
-    }
-
-    @Override
-    public int getNum() {
-        return this.num;
     }
 
     @Override

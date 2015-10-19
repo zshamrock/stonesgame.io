@@ -18,4 +18,8 @@ public interface Player {
     WebGame getGame();
 
     void over();
+
+    default boolean isBot() {
+        return false;
+    }
 }
