@@ -8,6 +8,37 @@ Then the main application is available at http://localhost:58080/ and the admin 
 
 Ask another user to join the game as well, and you are ready to go!
 
+### Available environment variables
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Purpose</th>
+        <th>Possible values</th>
+    </tr>
+    <tr>
+        <td>PORT</td>
+        <td>Port on which the application is running</td>
+        <td>Any available port. In case of Heroku, except port 80, 
+            as it binds the application on the configured PORT and then forward requrest from :80 to the application.
+        </td>
+    </tr>
+    <tr>
+        <td>BOTS_ENABLED</td>
+        <td>Enable or disable bots support</td>
+        <td>true | false</td>
+    </tr>
+    <tr>
+        <td>BOTS_SCHEDULED_PERIOD_IN_SECONDS</td>
+        <td>Period in secods of a new bot to be added to the players queue, so to be available to join the game.</td>
+        <td>Any positive number greater or equal 10. Reasonable values are between 10 and 30 seconds.</td>
+    </tr>
+    <tr>
+        <td>BOTS_POOL_SIZE</td>
+        <td>Maximum number of bots avaialable in the application.</td>
+        <td>Any positive number less or equal 100. Reasonable values are between 5 and 100.</td>
+    </tr>
+</table>
+
 ### License
 The MIT License (MIT)
 
