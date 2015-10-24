@@ -7,7 +7,7 @@ server:
     - type: http
       port: 58081
 metrics:
-  frequency: 5 minutes
+  frequency: 10 minutes
   reporters:
     - type: console
       timeZone: UTC
