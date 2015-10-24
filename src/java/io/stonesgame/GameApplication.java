@@ -17,6 +17,8 @@ import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -29,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletRegistration;
 
 public class GameApplication extends Application<GameConfiguration> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameApplication.class);
 
     private BlockingQueue<Player> players;
     private final ConcurrentMap<UUID, WebGame> games = new ConcurrentHashMap<>();
@@ -73,7 +77,9 @@ public class GameApplication extends Application<GameConfiguration> {
     }
 
     private void runBots(final GameConfiguration configuration, final Environment environment) {
-        if (configuration.getBots().isEnabled()) {
+        final boolean botsEnabled = configuration.getBots().isEnabled();
+        LOGGER.info("Bots support is {}.", botsEnabled ? "enabled" : "not enabled");
+        if (botsEnabled) {
             final ScheduledExecutorService scheduledExecutorService = environment.lifecycle()
                     .scheduledExecutorService("bots-%d")
                     .threads(1)
@@ -100,7 +106,7 @@ public class GameApplication extends Application<GameConfiguration> {
         bootstrap.setConfigurationSourceProvider(
                 new SubstitutingSourceProvider(
                         bootstrap.getConfigurationSourceProvider(),
-                        new EnvironmentVariableSubstitutor()));
+                        new EnvironmentVariableSubstitutor(false))); // not strict, allows undefined env vars
         // serve static files from root "/" and configure index page
         bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.html", "assets"));
     }

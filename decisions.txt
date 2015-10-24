@@ -1,2 +1,0 @@
-### Oct 15, 2015
-- introduced pool for the bots to reduce GC overhead
