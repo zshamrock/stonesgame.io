@@ -13,6 +13,8 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -93,6 +95,13 @@ public class GameApplication extends Application<GameConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<GameConfiguration> bootstrap) {
+        // allow for ease of configuration via environment variables
+        // according to The Twelve-Factor App [http://12factor.net/], and deployment on Heroku
+        bootstrap.setConfigurationSourceProvider(
+                new SubstitutingSourceProvider(
+                        bootstrap.getConfigurationSourceProvider(),
+                        new EnvironmentVariableSubstitutor()));
+        // serve static files from root "/" and configure index page
         bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.html", "assets"));
     }
 }
