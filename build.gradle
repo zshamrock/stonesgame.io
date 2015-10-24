@@ -38,7 +38,7 @@ sourceSets {
 
 ext {
     groovyMajorVersion = 2.4
-    groovyMinorVersion = 4
+    groovyMinorVersion = 5
     jettyVersion = '9.2.9.v20150224'
 }
 
@@ -61,7 +61,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.6'
+    gradleVersion = '2.8'
 }
 
 tasks.check.dependsOn 'jacocoTestReport'
