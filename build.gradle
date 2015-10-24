@@ -47,6 +47,7 @@ repositories {
 }
 
 dependencies {
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.5.1"
     // required dropwizard modules
     ['core', 'views', 'assets'].each { module ->
         compile "io.dropwizard:dropwizard-$module:0.8.4"

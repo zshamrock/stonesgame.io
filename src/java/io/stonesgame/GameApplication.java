@@ -1,6 +1,10 @@
-package io.stonesgame.web;
+package io.stonesgame;
 
 import io.stonesgame.bots.Bots;
+import io.stonesgame.config.GameConfiguration;
+import io.stonesgame.web.GameJoiner;
+import io.stonesgame.web.Player;
+import io.stonesgame.web.WebGame;
 import io.stonesgame.web.health.HealthCheckPlayer;
 import io.stonesgame.web.health.PlayersQueueCapacityHealthCheck;
 import io.stonesgame.web.websocket.GameWebSocketServlet;
@@ -67,7 +71,7 @@ public class GameApplication extends Application<GameConfiguration> {
     }
 
     private void runBots(final GameConfiguration configuration, final Environment environment) {
-        if (configuration.isBotsEnabled()) {
+        if (configuration.getBots().isEnabled()) {
             final ScheduledExecutorService scheduledExecutorService = environment.lifecycle()
                     .scheduledExecutorService("bots-%d")
                     .threads(1)

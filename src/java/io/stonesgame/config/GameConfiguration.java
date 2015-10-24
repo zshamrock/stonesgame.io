@@ -1,11 +1,13 @@
-package io.stonesgame.web;
+package io.stonesgame.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import io.dropwizard.Configuration;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class GameConfiguration extends Configuration {
     public static final String QUEUE_CAPACITY = "QUEUE_CAPACITY";
@@ -15,6 +17,10 @@ public class GameConfiguration extends Configuration {
     @Min(0)
     @Max(MAX_QUEUE_CAPACITY)
     private int queueCapacity;
+
+    @Valid
+    @NotNull
+    private BotsConfiguration bots = new BotsConfiguration();
 
     public int getQueueCapacity() {
         final int capacity = Math.min(
@@ -33,7 +39,12 @@ public class GameConfiguration extends Configuration {
         this.queueCapacity = queueCapacity;
     }
 
-    public boolean isBotsEnabled() {
-        return true;
+    @JsonProperty
+    public void setBots(final BotsConfiguration bots) {
+        this.bots = bots;
+    }
+
+    public BotsConfiguration getBots() {
+        return this.bots;
     }
 }

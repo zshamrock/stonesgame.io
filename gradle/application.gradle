@@ -4,7 +4,7 @@ ext {
     configFile = 'game.yaml'
 }
 
-mainClassName = 'io.stonesgame.web.GameApplication'
+mainClassName = 'io.stonesgame.GameApplication'
 applicationDefaultJvmArgs = ["-Ddw.server.applicationConnectors[0].port=${runPort()}"]
 run {
     args = ['server', configFile]

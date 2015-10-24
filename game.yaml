@@ -13,3 +13,7 @@ metrics:
       timeZone: UTC
       output: stdout
 queueCapacity: 100
+bots:
+  enabled: true
+  scheduledPeriodInSeconds: 10
+  poolSize: 10

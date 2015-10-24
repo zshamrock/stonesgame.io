@@ -1,6 +1,7 @@
-package io.stonesgame.web
+package io.stonesgame
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import io.stonesgame.web.WebGameClient
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.WebSocketAdapter
 import spock.lang.*
