@@ -77,9 +77,9 @@ public class GameApplication extends Application<GameConfiguration> {
                     .threads(1)
                     .build();
             scheduledExecutorService.scheduleAtFixedRate(
-                    new Bots(this.players),
+                    new Bots(this.players, configuration.getBots().getPoolSize()),
                     Bots.INITIAL_DELAY_IN_SECONDS,
-                    Bots.SCHEDULED_PERIOD_IN_SECONDS,
+                    configuration.getBots().getScheduledPeriodInSeconds(),
                     TimeUnit.SECONDS);
         }
     }

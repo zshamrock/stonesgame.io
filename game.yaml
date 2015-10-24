@@ -15,5 +15,5 @@ metrics:
 queueCapacity: 100
 bots:
   enabled: true
-  scheduledPeriodInSeconds: 10
+  scheduledPeriodInSeconds: 30
   poolSize: 10
