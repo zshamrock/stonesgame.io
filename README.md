@@ -17,14 +17,14 @@ Ask another user to join the game as well, and you are ready to go!
     </tr>
     <tr>
         <td>PORT</td>
-        <td>Port on which the application is running</td>
+        <td>Port on which the application is running.</td>
         <td>Any available port. In case of Heroku, except port 80, 
             as it binds the application on the configured PORT and then forward requrest from :80 to the application.
         </td>
     </tr>
     <tr>
         <td>BOTS_ENABLED</td>
-        <td>Enable or disable bots support</td>
+        <td>Enable or disable bots support.</td>
         <td>true | false</td>
     </tr>
     <tr>
