@@ -1,7 +1,8 @@
 ## stonesgame.io [![Build Status](https://travis-ci.org/zshamrock/stonesgame.io.svg?branch=master)](https://travis-ci.org/zshamrock/stonesgame.io) [![Coverity Status](https://img.shields.io/coverity/scan/6848.svg)](https://scan.coverity.com/projects/zshamrock-stonesgame-io) [![Coverage Status](https://img.shields.io/coveralls/zshamrock/stonesgame.io/master.svg)](https://coveralls.io/github/zshamrock/stonesgame.io?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/56365903c5999a0009000001/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56365903c5999a0009000001)
 
 ### Overview
-Online demo game. Leverage web-sockets for interactivity and dropwizard for u-service approach.
+Online real-time demo game.
+Leverage web-sockets for interactivity and dropwizard for u-services approach.
 
 ### How to run
 Just do:
