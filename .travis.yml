@@ -5,4 +5,4 @@ addons:
   artifacts: true
   s3_region: "eu-central-1" # EU (Frankfurt)
   paths:
-    - build/reports
+    - ./build/reports
