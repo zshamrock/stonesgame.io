@@ -22,6 +22,10 @@ can't join a game, which was a deliberate decision.
 Application is 100% stateless, no state is kept on the backend. Again an explicit choice, considering the scope and the
 purpose of the application.
 
+Architecture style: micro services, or more precise wanted something which can be run, without necessity of a separate
+web application container, like Tomcat. So, an embedded option or own HTTP server implementation. Went with an embedded
+Jetty provided by Dropwizard.
+
 Key characteristic of any project (and this one is not an exception) is to have tools enforcing and checking code style,
 code coverage, static analysis. That is why Checkstyle, JaCoCo, PMD/FindBugs were used. There is even a dedicated
 project of mine to help getting started with a such setup: [Gradle Getting Started Template](https://github.com/zshamrock/gradle-getting-started-template).
