@@ -1,5 +1,17 @@
 description = 'Stones Game - a massive online multiplayer game'
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.standardout:gradle-versioneye-plugin:1.0.1'
+    }
+}
+
+// versioneye integration
+apply plugin: 'org.standardout.versioneye'
+
 apply plugin: 'java'
 // groovy is required for Spock
 apply plugin: 'groovy'
