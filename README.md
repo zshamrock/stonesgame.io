@@ -1,3 +1,8 @@
+## stonesgame.io [![Builds](https://api.travis-ci.org/repositories/zshamrock/stonesgame.io.svg?branch=master)](https://travis-ci.org/zshamrock/stonesgame.io)
+
+### Overview
+Online demo game. Leverage web-sockets for interactivity and dropwizard for u-service approach.
+
 ### How to run
 Just do:
 
