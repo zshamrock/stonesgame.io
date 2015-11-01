@@ -1,3 +1,20 @@
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+    - secure: "418YzkB1O/CP/HLVQsygyJCS/cQVxvB+5NznuqA3pjIeocooFTOrKmpMe6ijYGIenmbuxfRfzCLStBEpCGDSZpYmRvf+8hPUTXjTFLWqiTvIL75i0yE8fZrova4Pnj0R7PTh2CpMZ4foa3zj4kTkWLGOrUBxBqAvHijBaBAAtATvaxts1rh+UcmBAbSdL9JjYYHT79Uh3YNWf9nMqKuQ4m7Fgtl5kJ7rTjeyL+q+D3kd6zPxbmohHxLvJafgtkrWwYHCe9UpORczMGILyvDUYor3GmhfMfH1CoNAYJnuAFk9VCWdwKgOGUUlvwjciU5ywC2tgr0pUGPMyCnfycbFnGCopLi+kBEACAtvlFf06VxQIF8UP+WkPL1ZNcof7txhm/8sDEDokefGs66iYVLu6MJRnV1FDG3jXVUCthnXFgziNMnwn0N793w61l/B/DEBeoPc40UtHw1FQQDVBjhihvQ2RsUTBIMWbtTElKRWVjcciTgATCtx4OnIziYz7aXiXwB+le+oL9WdcVvZIf/sVANKANYzjLrUFBhDNhA9gaS2wQA2mjqNz9/aT2BGnKYP13AsGpOzp2aSPRCgzsATHp/Y/EaPrhoVmHqXZrQf7UhStLAxIX8xEJA1iM8jtg6yUtmb7tp3O0CswoWsfLpcWCanHDCW+Je+AH/C26COtgw="
+
 language: java
+
 jdk:
   - oraclejdk8
+
+addons:
+  coverity_scan:
+    project:
+      name: "zshamrock/stonesgame.io"
+      description: "Massive, well ;), online multiplayer game"
+    notification_email: aliaksandr.kazlou@gmail.com
+    build_command_prepend: "./gradlew clean"
+    build_command:   "./gradlew classes"
+    branch_pattern: coverity_scan
