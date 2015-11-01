@@ -6,11 +6,14 @@ buildscript {
     }
     dependencies {
         classpath 'org.standardout:gradle-versioneye-plugin:1.0.1'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
     }
 }
 
 // versioneye integration
 apply plugin: 'org.standardout.versioneye'
+// coveralls integration
+apply plugin: 'com.github.kt3k.coveralls'
 
 apply plugin: 'java'
 // groovy is required for Spock

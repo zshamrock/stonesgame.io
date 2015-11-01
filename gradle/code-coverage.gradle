@@ -6,4 +6,8 @@ jacoco {
 
 jacocoTestReport {
     group = 'Reporting'
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
