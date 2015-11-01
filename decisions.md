@@ -60,7 +60,7 @@ project of mine to help getting started with a such setup: [Gradle Getting Start
 
     It is just a personal choice versus maven, to give it a try, and I used it for another projects as well,
     and found it superior comparing to Maven, and leverage Groovy skills.
-- Alternatives: Maven. Again both would do the job well, it is just simply Gradle of being the build tool of mine nowadays.
+- *Alternatives*: Maven. Again both would do the job well, it is just simply Gradle of being the build tool of mine nowadays.
 
 ### Testing
 - *Spock*
