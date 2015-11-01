@@ -4,6 +4,8 @@
 Online real-time demo game.
 Leverage web-sockets for interactivity and dropwizard for u-services approach.
 
+To read more about technical and not only decisions made check [decisions.md] (https://github.com/zshamrock/stonesgame.io/blob/master/decisions.md).
+
 ### How to run
 Just do:
 
