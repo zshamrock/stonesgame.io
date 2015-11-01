@@ -47,6 +47,11 @@ Ask another user to join the game as well, and you are ready to go!
     </tr>
 </table>
 
+### Rules
+![Rules](https://github.com/zshamrock/stonesgame.io/blob/master/rules.png)
+
+For more details read [Game Rules](https://github.com/zshamrock/stonesgame.io/wiki/Game-Rules).
+
 ### License
 The MIT License (MIT)
 
